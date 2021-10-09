@@ -7,13 +7,17 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		4E1E997A2711E13D00B13FDC /* AlpsHID.c in Sources */ = {isa = PBXBuildFile; fileRef = 4E1E99792711E13D00B13FDC /* AlpsHID.c */; };
+		4E1E99842711E1DA00B13FDC /* libkmod.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E1E99832711E1C900B13FDC /* libkmod.a */; };
+		4E1E998C2711E31500B13FDC /* AlpsHID.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 4E1E998A2711E31500B13FDC /* AlpsHID.hpp */; };
+		4E1E998D2711E31500B13FDC /* AlpsHID.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4E1E998B2711E31500B13FDC /* AlpsHID.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		4E1E99762711E13D00B13FDC /* AlpsHID.kext */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AlpsHID.kext; sourceTree = BUILT_PRODUCTS_DIR; };
-		4E1E99792711E13D00B13FDC /* AlpsHID.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = AlpsHID.c; sourceTree = "<group>"; };
 		4E1E997B2711E13D00B13FDC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4E1E99832711E1C900B13FDC /* libkmod.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libkmod.a; path = usr/lib/libkmod.a; sourceTree = SDKROOT; };
+		4E1E998A2711E31500B13FDC /* AlpsHID.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = AlpsHID.hpp; sourceTree = "<group>"; };
+		4E1E998B2711E31500B13FDC /* AlpsHID.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AlpsHID.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -21,6 +25,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4E1E99842711E1DA00B13FDC /* libkmod.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -32,6 +37,7 @@
 			children = (
 				4E1E99782711E13D00B13FDC /* AlpsHID */,
 				4E1E99772711E13D00B13FDC /* Products */,
+				4E1E99822711E1C900B13FDC /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -46,10 +52,19 @@
 		4E1E99782711E13D00B13FDC /* AlpsHID */ = {
 			isa = PBXGroup;
 			children = (
-				4E1E99792711E13D00B13FDC /* AlpsHID.c */,
+				4E1E998B2711E31500B13FDC /* AlpsHID.cpp */,
+				4E1E998A2711E31500B13FDC /* AlpsHID.hpp */,
 				4E1E997B2711E13D00B13FDC /* Info.plist */,
 			);
 			path = AlpsHID;
+			sourceTree = "<group>";
+		};
+		4E1E99822711E1C900B13FDC /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				4E1E99832711E1C900B13FDC /* libkmod.a */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -59,6 +74,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4E1E998C2711E31500B13FDC /* AlpsHID.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -129,7 +145,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4E1E997A2711E13D00B13FDC /* AlpsHID.c in Sources */,
+				4E1E998D2711E31500B13FDC /* AlpsHID.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -187,7 +203,9 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 11.1;
+				KERNEL_EXTENSION_HEADER_SEARCH_PATHS = /Users/blankmac/Desktop/AlpsHID/MacKernelSDK/Headers;
+				KERNEL_FRAMEWORK_HEADERS = /Users/blankmac/Desktop/AlpsHID/MacKernelSDK/Headers;
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -240,7 +258,9 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 11.1;
+				KERNEL_EXTENSION_HEADER_SEARCH_PATHS = /Users/blankmac/Desktop/AlpsHID/MacKernelSDK/Headers;
+				KERNEL_FRAMEWORK_HEADERS = /Users/blankmac/Desktop/AlpsHID/MacKernelSDK/Headers;
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = macosx;
@@ -253,12 +273,13 @@
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = NO;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = AlpsHID/Info.plist;
-				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MARKETING_VERSION = 1.0;
 				MODULE_NAME = blankmac.AlpsHID;
 				MODULE_START = AlpsHID_start;
 				MODULE_STOP = AlpsHID_stop;
 				MODULE_VERSION = 1.0.0d1;
-				PRODUCT_BUNDLE_IDENTIFIER = blankmac.AlpsHID;
+				PRODUCT_BUNDLE_IDENTIFIER = com.blankmac.AlpsHID;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				RUN_CLANG_STATIC_ANALYZER = YES;
 				WRAPPER_EXTENSION = kext;
@@ -271,12 +292,13 @@
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = NO;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = AlpsHID/Info.plist;
-				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MARKETING_VERSION = 1.0;
 				MODULE_NAME = blankmac.AlpsHID;
 				MODULE_START = AlpsHID_start;
 				MODULE_STOP = AlpsHID_stop;
 				MODULE_VERSION = 1.0.0d1;
-				PRODUCT_BUNDLE_IDENTIFIER = blankmac.AlpsHID;
+				PRODUCT_BUNDLE_IDENTIFIER = com.blankmac.AlpsHID;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				RUN_CLANG_STATIC_ANALYZER = YES;
 				WRAPPER_EXTENSION = kext;

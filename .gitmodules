@@ -1,0 +1,3 @@
+[submodule "VoodooInput"]
+	path = VoodooInput
+	url = https://github.com/acidanthera/VoodooInput/
