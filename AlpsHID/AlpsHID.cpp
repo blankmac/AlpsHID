@@ -153,8 +153,8 @@ bool AlpsHIDEventDriver::handleStart(IOService* provider) {
     
     if (!hid_interface->open(this, 0, OSMemberFunctionCast(IOHIDInterface::InterruptReportAction, this, &AlpsHIDEventDriver::handleInterruptReport), NULL))
         return false;
-
-    name = getProductName();
+    
+    name = (char*) hid_interface->getProduct();
     
     PMinit();
     
@@ -194,7 +194,7 @@ IOReturn AlpsHIDEventDriver::setPowerState(unsigned long whichState, IOService* 
                     t4_device_init();
                     break;
                 case U1:
-                    u1_read_write_register(ADDRESS_U1_DEV_CTRL_1, NULL, U1_TP_ABS_MODE, false);
+                    u1_device_init();
                     break;
             }
             
@@ -280,12 +280,6 @@ bool AlpsHIDEventDriver::init(OSDictionary *properties) {
     return true;
 }
 
-const char* AlpsHIDEventDriver::getProductName() {
-    
-    OSString* name = getProduct();
-    
-    return name->getCStringNoCopy();
-}
 
 bool AlpsHIDEventDriver::didTerminate(IOService* provider, IOOptionBits options, bool* defer) {
     if (hid_interface)
@@ -333,8 +327,11 @@ void AlpsHIDEventDriver::t4_raw_event(AbsoluteTime timestamp, IOMemoryDescriptor
         y = reportData.contact[i].y_hi << 8 | reportData.contact[i].y_lo;
         y = 3060 - y + 255;
         bool contactValid= (reportData.contact[i].palm < 0x80 &&
-             reportData.contact[i].palm > 0) * 62;
-        
+                            reportData.contact[i].palm > 0) * 62;
+        //When palm is detected just dont send anything
+        if(reportData.contact[i].palm & 0x80){
+            return;
+        }
         transducer->isValid = contactValid;
         transducer->timestamp = timestamp;
         transducer->supportsPressure = false;
@@ -403,70 +400,79 @@ void AlpsHIDEventDriver::u1_raw_event(AbsoluteTime timestamp, IOMemoryDescriptor
 
     unsigned int x, y, z;
     
-    UInt8 data[sizeof(report)] = {};
-    report->readBytes(0, &data, sizeof(report));
-    
-    int contactCount = 0;
-    for (int i = 0; i < MAX_TOUCHES; i++) {
-        VoodooInputTransducer* transducer = &inputMessage.transducers[i];
+    if(report_id==U1_ABSOLUTE_REPORT_ID) {
+        u1_input_report reportData;
+        report->readBytes(0, &reportData, report->getLength());
         
-        transducer->type = VoodooInputTransducerType::FINGER;
-        transducer->fingerType = (MT2FingerType) (kMT2FingerTypeIndexFinger + (i % 4));
-        transducer->secondaryId = 3;
-        
-        UInt8 *contact = &data[i * 5];
-        x = get_unaligned_le16(contact + 3);
-        y = get_unaligned_le16(contact + 5);
-        z = contact[7] & 0x7F;
-        
-        bool contactValid = z;
-        transducer->isValid = contactValid;
-        transducer->timestamp = timestamp;
-        transducer->supportsPressure = false;
-        
-        if (contactValid) {
-            transducer->isTransducerActive = true;
+        int contactCount = 0;
+        for (int i = 0; i < MAX_TOUCHES; i++) {
+            VoodooInputTransducer* transducer = &inputMessage.transducers[i];
+            
+            transducer->type = VoodooInputTransducerType::FINGER;
+            transducer->fingerType = (MT2FingerType) (kMT2FingerTypeIndexFinger + (i % 4));
             transducer->secondaryId = i;
             
-            transducer->previousCoordinates = transducer->currentCoordinates;
-            transducer->currentCoordinates.x = x;
-            transducer->currentCoordinates.y = y;
+            x = reportData.contact[i].x_hi << 8 | reportData.contact[i].x_lo;
+            y = reportData.contact[i].y_hi << 8 | reportData.contact[i].y_lo;
+            z = reportData.contact[i].z & 0x7F;
+            bool contactValid = z;
+            transducer->isValid = contactValid;
+            transducer->timestamp = timestamp;
+            transducer->supportsPressure = false;
             
-            transducer->isPhysicalButtonDown = data[1] & 0x1;
-           
-            contactCount += 1;
-        } else {
-            transducer->isTransducerActive =  false;
-            transducer->secondaryId = i;
-            transducer->currentCoordinates = transducer->previousCoordinates;
-            transducer->isPhysicalButtonDown = false;
-        }
-        
-        x = 0;
-        y = 0;
-        z = 0;
-    }
-    
-    inputMessage.contact_count = contactCount;
-    inputMessage.timestamp = timestamp;
-    
-    if (contactCount >= 4 || inputMessage.transducers->isPhysicalButtonDown) {
-        // simple thumb detection: to find the lowest finger touch in the vertical direction.
-        UInt32 y_max = 0;
-        int thumb_index = 0;
-        for (int i = 0; i < contactCount; i++) {
-            VoodooInputTransducer* inputTransducer = &inputMessage.transducers[i];
-            if (inputTransducer->isValid && inputTransducer->currentCoordinates.y >= y_max) {
-                y_max = inputTransducer->currentCoordinates.y;
-                thumb_index = i;
+            if (contactValid) {
+                transducer->isTransducerActive = true;
+                transducer->secondaryId = i;
+                
+                transducer->previousCoordinates = transducer->currentCoordinates;
+                transducer->currentCoordinates.x = x;
+                transducer->currentCoordinates.y = y;
+                transducer->isPhysicalButtonDown = reportData.buttons;
+                
+                contactCount += 1;
+            } else {
+                transducer->isTransducerActive =  false;
+                transducer->secondaryId = i;
+                transducer->currentCoordinates = transducer->previousCoordinates;
+                transducer->isPhysicalButtonDown = reportData.buttons;
             }
+            
+            
         }
-        inputMessage.transducers[thumb_index].fingerType = kMT2FingerTypeThumb;
+        //send button commands as mouse input.
+        dispatchRelativePointerEvent(timestamp, 0, 0, reportData.buttons);
+        
+        inputMessage.contact_count = contactCount;
+        inputMessage.timestamp = timestamp;
+        
+        if (contactCount >= 4 || inputMessage.transducers->isPhysicalButtonDown) {
+            // simple thumb detection: to find the lowest finger touch in the vertical direction.
+            UInt32 y_max = 0;
+            int thumb_index = 0;
+            for (int i = 0; i < contactCount; i++) {
+                VoodooInputTransducer* inputTransducer = &inputMessage.transducers[i];
+                if (inputTransducer->isValid && inputTransducer->currentCoordinates.y >= y_max) {
+                    y_max = inputTransducer->currentCoordinates.y;
+                    thumb_index = i;
+                }
+            }
+            inputMessage.transducers[thumb_index].fingerType = kMT2FingerTypeThumb;
+        }
+        
+        
+        super::messageClient(kIOMessageVoodooInputMessage, voodooInputInstance, &inputMessage, sizeof(VoodooInputEvent));
+        return;
     }
-
-       
-    super::messageClient(kIOMessageVoodooInputMessage, voodooInputInstance, &inputMessage, sizeof(VoodooInputEvent));
- }
+    
+    if(report_id== U1_SP_ABSOLUTE_REPORT_ID){
+        u1_sp_input_report reportData;
+        report->readBytes(0, &reportData, report->getLength());
+        dispatchRelativePointerEvent(timestamp, reportData.x/4,reportData.y/4, reportData.buttons & 0x07);
+        return;
+    }
+    return;
+    
+}
 
 bool AlpsHIDEventDriver::u1_device_init() {
     
@@ -522,9 +528,9 @@ bool AlpsHIDEventDriver::u1_device_init() {
         IOLog("%s::%s Could not read absolute mode resolution\n", getName(), name);
         goto exit;
     }
-
-    pri_data.x_active_len_mm = (pitch_x * (sen_line_num_x - 1)) / 10;
-    pri_data.y_active_len_mm = (pitch_y * (sen_line_num_y - 1)) / 10;
+    
+    pri_data.x_active_len_mm = (pitch_x * (sen_line_num_x - 1));
+    pri_data.y_active_len_mm = (pitch_y * (sen_line_num_y - 1));
     
     pri_data.x_max = (resolution << 2) * (sen_line_num_x - 1);
     pri_data.x_min = 1;
@@ -542,6 +548,19 @@ bool AlpsHIDEventDriver::u1_device_init() {
     } else {
         /* Button pad */
         pri_data.btn_cnt = 1;
+    }
+    
+    u1_read_write_register(ADDRESS_U1_DEVICE_TYP, &tmp, 0, true);
+    if (ret != kIOReturnSuccess) {
+        IOLog("%s::%s Could not read button count\n", getName(), name);
+        goto exit;
+    }
+    if(tmp & U1_DEVTYPE_SP_SUPPORT)
+    {
+        dev_ctrl |= U1_SP_ABS_MODE;
+        u1_read_write_register(ADDRESS_U1_DEV_CTRL_1, 0, dev_ctrl, false);
+        u1_read_write_register(ADDRESS_U1_SP_BTN, &pri_data.sp_btn_info, 0, true);
+        pri_data.has_sp = 1;
     }
     
     setProperty(VOODOO_INPUT_LOGICAL_MAX_X_KEY, pri_data.x_max, 32);

@@ -55,6 +55,7 @@ for the alps t4 touchpad (https://github.com/torvalds/linux/blob/master/drivers/
 #define T4_PRM_FEED_CONFIG_1        (T4_ADDRESS_BASE + 0x0004)
 #define T4_PRM_FEED_CONFIG_4        (T4_ADDRESS_BASE + 0x001A)
 #define T4_PRM_ID_CONFIG_3          (T4_ADDRESS_BASE + 0x00B0)
+#define T4_GPIO_PINS                (T4_ADDRESS_BASE + 0x000C)
 
 #define T4_FEEDCFG4_ADVANCED_ABS_ENABLE            0x01
 #define T4_I2C_ABS                  0x78
@@ -62,16 +63,21 @@ for the alps t4 touchpad (https://github.com/torvalds/linux/blob/master/drivers/
 #define T4_COUNT_PER_ELECTRODE      256
 #define MAX_TOUCHES                 5
 
+#define U1_MOUSE_REPORT_ID          0x01 /* Mouse data ReportID */
 #define U1_ABSOLUTE_REPORT_ID       0x03 /* Absolute data ReportID */
+#define U1_ABSOLUTE_REPORT_ID_SECD  0x02 /* FW-PTP Absolute data ReportID */
 #define U1_FEATURE_REPORT_ID        0x05 /* Feature ReportID */
+#define U1_SP_ABSOLUTE_REPORT_ID    0x06 /* Feature ReportID */
 
 #define U1_FEATURE_REPORT_LEN       0x08 /* Feature Report Length */
 #define U1_FEATURE_REPORT_LEN_ALL   0x0A
 #define U1_CMD_REGISTER_READ        0xD1
 #define U1_CMD_REGISTER_WRITE       0xD2
 
+#define U1_DEVTYPE_SP_SUPPORT       0x10 /* SP Support */
 #define U1_DISABLE_DEV              0x01
 #define U1_TP_ABS_MODE              0x02
+#define U1_SP_ABS_MODE              0x80
 
 #define ADDRESS_U1_DEV_CTRL_1       0x00800040
 #define ADDRESS_U1_DEVICE_TYP       0x00800043
@@ -81,6 +87,7 @@ for the alps t4 touchpad (https://github.com/torvalds/linux/blob/master/drivers/
 #define ADDRESS_U1_PITCH_SENS_Y     0x0080004A
 #define ADDRESS_U1_RESO_DWN_ABS     0x0080004E
 #define ADDRESS_U1_PAD_BTN          0x00800052
+#define ADDRESS_U1_SP_BTN           0x0080009F
 
 
 // Message types defined by ApplePS2Keyboard
@@ -99,6 +106,8 @@ enum dev_num {
 
 struct alps_dev {
     UInt8     max_fingers;
+    UInt8     has_sp;
+    UInt8     sp_btn_info;
     UInt32    x_active_len_mm;
     UInt32    y_active_len_mm;
     UInt32    x_max;
@@ -106,6 +115,8 @@ struct alps_dev {
     UInt32    x_min;
     UInt32    y_min;
     UInt32    btn_cnt;
+    UInt32    sp_btn_cnt;
+
 };
 
 
@@ -127,6 +138,29 @@ struct __attribute__((__packed__)) t4_input_report {
     UInt8  palmTime[5];
     UInt8  kilroy;
     UInt16 timeStamp;
+};
+
+struct __attribute__((__packed__)) u1_contact_data {
+    UInt8    x_lo;
+    UInt8    x_hi;
+    UInt8    y_lo;
+    UInt8    y_hi;
+    UInt8       z;
+};
+
+struct __attribute__((__packed__)) u1_input_report {
+    UInt8  reportID;
+    UInt8  buttons;
+    UInt8  numContacts;
+    struct u1_contact_data contact[5];
+};
+
+struct __attribute__((__packed__)) u1_sp_input_report{
+    UInt8 reportID;
+    UInt8 buttons;
+    short x;
+    short y;
+    UInt16 z;
 };
 
 class AlpsHIDEventDriver : public IOHIDEventService {
@@ -153,7 +187,6 @@ public:
     
     
     IOReturn publishMultitouchInterface();
-    const char* getProductName();
     
     void put_unaligned_le32(uint32_t val, void *p);
     void __put_unaligned_le16(uint16_t val, uint8_t *p);
