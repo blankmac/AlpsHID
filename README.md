@@ -14,6 +14,8 @@ Use the supplied VoodooI2CHID as it contains a fix not yet implemented in the ma
   - Latitude 5480
   - Latitude 5580
   - Latitude 7280
+  - Latitude 7380
+  - Latitude 7480
 - HP
   - ZBook G3 studio
   - Elite X2 1012 G1
