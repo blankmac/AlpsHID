@@ -11,11 +11,15 @@ Use the supplied VoodooI2CHID as it contains a fix not yet implemented in the ma
 # Supported hardware
 
 - Dell
+  - Latitude 5280
+  - Latitude 5288
   - Latitude 5480
+  - Latitude 5488
   - Latitude 5580
   - Latitude 7280
   - Latitude 7380
   - Latitude 7480
+  - Precision 3520
 - HP
   - ZBook G3 studio
   - Elite X2 1012 G1
