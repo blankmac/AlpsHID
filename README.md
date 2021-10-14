@@ -34,6 +34,10 @@ ProductID:
 - 0X1209
 - 0X1216
 
+Experimental ProductIDs:
+- 0x121F
+- 0x120A
+
 # Building AlpsHID
 
 To build --
@@ -58,3 +62,4 @@ for the alps HID touchpad (https://github.com/torvalds/linux/blob/master/drivers
 - the [acidanthera team](https://github.com/acidanthera) for the MacKernel SDK.
 - [@juico](https://github.com/juico) for fixing I2C and U1 support.
 - [@lorys89](https://github.com/Lorys89) [@svilen88](https://github.com/Svilen88) [@QuanTrieuPCYT](https://github.com/QuanTrieuPCYT) for testing on the U1 touchpads
+- [@mbarbierato](https://github.com/mbarbierato) for fixing speed/sensitivity issues on the U1 touchpads.
