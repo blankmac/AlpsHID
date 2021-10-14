@@ -141,6 +141,8 @@ bool AlpsHIDEventDriver::handleStart(IOService* provider) {
             break;
         case HID_PRODUCT_ID_U1:
         case HID_PRODUCT_ID_U1_DUAL:
+        case HID_PRODUCT_ID_U1_DUAL_PTP:
+        case HID_PRODUCT_ID_U1_PTP_2:
             dev_type = U1;
             break;
             
@@ -384,6 +386,9 @@ void AlpsHIDEventDriver::u1_raw_event(AbsoluteTime timestamp, IOMemoryDescriptor
     clock_get_uptime(&now_abs);
     uint64_t now_ns;
     absolutetime_to_nanoseconds(now_abs, &now_ns);
+#if DEBUG
+    IOLog("%s::%s Recieving report: %u\n",getName(),name,report_id);
+#endif
     
     // Ignore touchpad interaction(s) shortly after typing
     if (now_ns - key_time < max_after_typing)
@@ -395,15 +400,15 @@ void AlpsHIDEventDriver::u1_raw_event(AbsoluteTime timestamp, IOMemoryDescriptor
     if (report_type != kIOHIDReportTypeInput)
         return;
     
-    if (report_id != U1_ABSOLUTE_REPORT_ID)
-        return;
-
     unsigned int x, y, z;
     
-    if(report_id==U1_ABSOLUTE_REPORT_ID) {
+    if(report_id==U1_ABSOLUTE_REPORT_ID || report_id==U1_ABSOLUTE_REPORT_ID_SECD) {
+        
         u1_input_report reportData;
         report->readBytes(0, &reportData, report->getLength());
-        
+#if DEBUG
+        IOLog("%s::%s Getting touched\n",getName(),name);
+#endif
         int contactCount = 0;
         for (int i = 0; i < MAX_TOUCHES; i++) {
             VoodooInputTransducer* transducer = &inputMessage.transducers[i];
@@ -423,7 +428,9 @@ void AlpsHIDEventDriver::u1_raw_event(AbsoluteTime timestamp, IOMemoryDescriptor
             if (contactValid) {
                 transducer->isTransducerActive = true;
                 transducer->secondaryId = i;
-                
+#if DEBUG
+                IOLog("%s::%s Finger %i at(%u,%u)\n", getName(), name, i, x, y);
+#endif
                 transducer->previousCoordinates = transducer->currentCoordinates;
                 transducer->currentCoordinates.x = x;
                 transducer->currentCoordinates.y = y;
@@ -440,7 +447,7 @@ void AlpsHIDEventDriver::u1_raw_event(AbsoluteTime timestamp, IOMemoryDescriptor
             
         }
         //send button commands as mouse input.
-        dispatchRelativePointerEvent(timestamp, 0, 0, reportData.buttons);
+        dispatchRelativePointerEvent(timestamp, 0, 0, reportData.buttons & 0x07);
         
         inputMessage.contact_count = contactCount;
         inputMessage.timestamp = timestamp;
@@ -467,6 +474,9 @@ void AlpsHIDEventDriver::u1_raw_event(AbsoluteTime timestamp, IOMemoryDescriptor
     if(report_id== U1_SP_ABSOLUTE_REPORT_ID){
         u1_sp_input_report reportData;
         report->readBytes(0, &reportData, report->getLength());
+#if DEBUG
+        IOLog("%s::%s Getting poked dx:%i, dy:%i \n", getName(), name, reportData.x, reportData.y);
+#endif
         dispatchRelativePointerEvent(timestamp, reportData.x/4,reportData.y/4, reportData.buttons & 0x07);
         return;
     }
