@@ -135,14 +135,19 @@ bool AlpsHIDEventDriver::handleStart(IOService* provider) {
     switch (hid_interface->getProductID()) {
             
         case HID_PRODUCT_ID_T4_USB:
+        case HID_PRODUCT_ID_T4_USB_2:
         case HID_PRODUCT_ID_G1:
         case HID_PRODUCT_ID_T4_BTNLESS:
             dev_type = T4;
             break;
         case HID_PRODUCT_ID_U1:
+        case HID_PRODUCT_ID_U1_OLDMAN:
+        case HID_PRODUCT_ID_U1_UNICORN_LEGACY:
         case HID_PRODUCT_ID_U1_DUAL:
         case HID_PRODUCT_ID_U1_DUAL_PTP:
+        case HID_PRODUCT_ID_U1_PTP_1:
         case HID_PRODUCT_ID_U1_PTP_2:
+        case HID_PRODUCT_ID_U1_DUAL_3BTN_PTP:
             dev_type = U1;
             break;
             

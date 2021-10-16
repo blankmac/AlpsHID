@@ -34,14 +34,20 @@ for the alps t4 touchpad (https://github.com/torvalds/linux/blob/master/drivers/
 
 #include "helpers.hpp"
 
-
+#define HID_PRODUCT_ID_T3_BTNLESS   0xD0C0
+#define HID_PRODUCT_ID_COSMO        0x1202
 #define HID_PRODUCT_ID_U1_DUAL      0x120B
 #define HID_PRODUCT_ID_T4_BTNLESS   0x120C
 #define HID_PRODUCT_ID_G1           0x120D
 #define HID_PRODUCT_ID_U1           0x1209
+#define HID_PRODUCT_ID_U1_UNICORN_LEGACY    0x121E
+#define HID_PRODUCT_ID_U1_OLDMAN    0x1215
 #define HID_PRODUCT_ID_T4_USB       0X1216
-#define HID_PRODUCT_ID_U1_DUAL_PTP  0x121F
+#define HID_PRODUCT_ID_T4_USB_2     0X1217
+#define HID_PRODUCT_ID_U1_PTP_1     0x1207
 #define HID_PRODUCT_ID_U1_PTP_2     0x120A
+#define HID_PRODUCT_ID_U1_DUAL_PTP  0x121F
+#define HID_PRODUCT_ID_U1_DUAL_3BTN_PTP    0x1220
 
 #define ALPS_VENDOR                 0x44e
 
