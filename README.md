@@ -38,6 +38,91 @@ ProductID:
 Experimental ProductIDs:
 - 0x121F
 - 0x120A
+- 0x121E
+- 0x1215
+- 0x1217
+- 0x1207
+- 0x1220
+
+# Possibly supported hardware
+
+List of devices that match the ProductIDs above, found using http://linux-hardware.org/
+
+- 0X120B
+  - Dell Precision 3520
+  - Dell Precision 7520
+  - Dell Precision 7720
+  - Dell Latitude 5280
+  - Dell Latitude 5289
+  - Dell Latitude 5480
+  - Dell Latitude 5580
+  - Dell Latitude 7280
+  - Dell Latitude 7380
+  - Dell Latitude 7480
+- 0X120C
+  - HP EliteBook Folio G1
+  - HP EliteBook Folio 1040 G3
+  - HP EliteBook 1030 G1
+  - HP ZBook Studio G3
+  - HP ZBook Studio G4
+- 0X120D
+  - HP Elite x2 1012 G1
+- 0X1209
+  - ?
+- 0X1216
+  - HP Elite x2 1012 G2
+- 0x121F
+  - Dell Precision 3530
+  - Dell Latitude 5490
+  - Dell Latitude 5491
+  - Dell Latitude 5495
+  - Dell Latitude 5590
+  - Dell Latitude 5591
+  - Dell Latitude 7490
+- 0x120A
+  - HP EliteBook 1040 G4 
+  - HP EliteBook x360 1020 G2 
+  - HP EliteBook x360 1030 G3
+  - Lenovo IdeaPad 330S
+  - Lenovo IdeaPad 530S
+  - Lenovo Yoga 530
+  - Dell Latitude 3480
+  - Dell Latitude 3490
+  - Dell Latitude 3580
+  - Dell Latitude 3590
+  - Dell Latitude 5290
+  - Dell Latitude 5300
+  - Dell Latitude 5300 2-in-1
+  - Dell Latitude 5310
+  - Dell Latitude 5310 2-in-1
+  - Dell Latitude 5420 Rugged
+  - Dell Latitude 5424 Rugged
+  - Dell Latitude 5490
+  - Dell Latitude 5491
+  - Dell Inspiron 5570
+  - Dell Inspiron 5575
+  - Dell Inspiron 5770
+  - Dell Latitude 7390
+  - Dell Latitude 7490
+  - Dell Latitude 7390 2-in-1
+- 0x121E
+  - Lenovo V130
+  - Lenovo V145
+  - Lenovo V330
+  - Lenovo IdeaPad 130
+  - Lenovo IdeaPad 330
+- 0x1215
+  - HP EliteBook x360 1030 G2 
+- 0x1217
+  - HP Pro x2 612 G2 
+- 0x1207
+  - ?
+- 0x1220
+  - Dell Precision 7530
+  - Dell Precision 7540
+  - Dell Precision 7730
+  - Dell Precision 7740 
+
 
 # Building AlpsHID
 
