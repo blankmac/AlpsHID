@@ -48,9 +48,10 @@ for the alps t4 touchpad (https://github.com/torvalds/linux/blob/master/drivers/
 #define HID_PRODUCT_ID_U1_PTP_2     0x120A
 #define HID_PRODUCT_ID_U1_DUAL_PTP  0x121F
 #define HID_PRODUCT_ID_U1_DUAL_3BTN_PTP    0x1220
+#define HID_PRODUCT_ID_U1_1222      0x1222
 
 #define ALPS_VENDOR                 0x44e
-
+#define CIRQUE_VENDOR               0x0488
 
 #define T4_INPUT_REPORT_LEN         sizeof(struct t4_input_report)
 #define T4_FEATURE_REPORT_LEN       T4_INPUT_REPORT_LEN

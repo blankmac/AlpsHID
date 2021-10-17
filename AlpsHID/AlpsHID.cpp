@@ -127,7 +127,7 @@ bool AlpsHIDEventDriver::handleStart(IOService* provider) {
     if (!hid_interface)
         return false;
 
-    if (hid_interface->getVendorID() != ALPS_VENDOR) {
+    if (hid_interface->getVendorID() != ALPS_VENDOR && hid_interface->getVendorID() != CIRQUE_VENDOR) {
         hid_interface = NULL;
         return false;
     }
@@ -148,6 +148,7 @@ bool AlpsHIDEventDriver::handleStart(IOService* provider) {
         case HID_PRODUCT_ID_U1_PTP_1:
         case HID_PRODUCT_ID_U1_PTP_2:
         case HID_PRODUCT_ID_U1_DUAL_3BTN_PTP:
+        case HID_PRODUCT_ID_U1_1222:
             dev_type = U1;
             break;
             
