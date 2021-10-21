@@ -477,7 +477,7 @@ void AlpsHIDEventDriver::u1_raw_event(AbsoluteTime timestamp, IOMemoryDescriptor
         return;
     }
     
-    if(report_id== U1_SP_ABSOLUTE_REPORT_ID){
+    if(report_id== U1_SP_ABSOLUTE_REPORT_ID || report_id== U1_SP_ABSOLUTE_REPORT_ID+1){
         u1_sp_input_report reportData;
         report->readBytes(0, &reportData, report->getLength());
 #if DEBUG
@@ -508,7 +508,8 @@ bool AlpsHIDEventDriver::u1_device_init() {
     
     dev_ctrl &= ~U1_DISABLE_DEV;
     dev_ctrl |= U1_TP_ABS_MODE;
-    
+    //force in into abs mode
+    dev_ctrl = U1_TP_ABS_MODE;
     u1_read_write_register(ADDRESS_U1_DEV_CTRL_1, NULL, dev_ctrl, false);
     if (ret != kIOReturnSuccess) {
         IOLog("%s::%s Could not put device in absolute mode\n", getName(), name);
