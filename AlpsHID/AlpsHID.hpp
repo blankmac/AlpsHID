@@ -29,8 +29,8 @@ for the alps t4 touchpad (https://github.com/torvalds/linux/blob/master/drivers/
 #include <IOKit/hid/IOHIDUsageTables.h>
 #include <IOKit/hid/IOHIDDevice.h>
 
-#include "../VoodooInput/VoodooInput/VoodooInputMultitouch/VoodooInputTransducer.h"
-#include "../VoodooInput/VoodooInput/VoodooInputMultitouch/VoodooInputMessages.h"
+#include "VoodooInputTransducer.h"
+#include "VoodooInputMessages.h"
 
 #include "helpers.hpp"
 
