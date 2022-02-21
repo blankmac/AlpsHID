@@ -395,7 +395,7 @@ void AlpsHIDEventDriver::u1_raw_event(AbsoluteTime timestamp, IOMemoryDescriptor
     uint64_t now_ns;
     absolutetime_to_nanoseconds(now_abs, &now_ns);
 #if DEBUG
-    IOLog("%s::%s Recieving report: %u\n",getName(),name,report_id);
+    IOLog("%s::%s Receiving report: %u\n",getName(),name,report_id);
 #endif
     
     // Ignore touchpad interaction(s) shortly after typing
