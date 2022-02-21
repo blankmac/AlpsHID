@@ -319,7 +319,7 @@ void AlpsHIDEventDriver::t4_raw_event(AbsoluteTime timestamp, IOMemoryDescriptor
     
     t4_input_report reportData;
     
-    unsigned int x, y;
+    unsigned int x, y, z;
     
     report->readBytes(0, &reportData, T4_INPUT_REPORT_LEN);
     
@@ -334,15 +334,15 @@ void AlpsHIDEventDriver::t4_raw_event(AbsoluteTime timestamp, IOMemoryDescriptor
         x = reportData.contact[i].x_hi << 8 | reportData.contact[i].x_lo;
         y = reportData.contact[i].y_hi << 8 | reportData.contact[i].y_lo;
         y = 3060 - y + 255;
-        bool contactValid= (reportData.contact[i].palm < 0x80 &&
-                            reportData.contact[i].palm > 0) * 62;
+        z = (reportData.contact[i].palm < 0x80 && reportData.contact[i].palm > 0) * 62;
+        bool contactValid = z;
         //When palm is detected just dont send anything
         if(reportData.contact[i].palm & 0x80){
             return;
         }
         transducer->isValid = contactValid;
         transducer->timestamp = timestamp;
-        transducer->supportsPressure = false;
+        transducer->supportsPressure = true;
         
         if (contactValid) {
             transducer->isTransducerActive = true;
@@ -351,6 +351,8 @@ void AlpsHIDEventDriver::t4_raw_event(AbsoluteTime timestamp, IOMemoryDescriptor
             transducer->previousCoordinates = transducer->currentCoordinates;
             transducer->currentCoordinates.x = x;
             transducer->currentCoordinates.y = y;
+            transducer->currentCoordinates.pressure = z > 100 ? 255 : 5;
+            transducer->currentCoordinates.width = z / 2;
             
             transducer->isPhysicalButtonDown = reportData.button;
            
@@ -429,7 +431,7 @@ void AlpsHIDEventDriver::u1_raw_event(AbsoluteTime timestamp, IOMemoryDescriptor
             bool contactValid = z;
             transducer->isValid = contactValid;
             transducer->timestamp = timestamp;
-            transducer->supportsPressure = false;
+            transducer->supportsPressure = true;
             
             if (contactValid) {
                 transducer->isTransducerActive = true;
@@ -440,6 +442,9 @@ void AlpsHIDEventDriver::u1_raw_event(AbsoluteTime timestamp, IOMemoryDescriptor
                 transducer->previousCoordinates = transducer->currentCoordinates;
                 transducer->currentCoordinates.x = x;
                 transducer->currentCoordinates.y = y;
+                transducer->currentCoordinates.pressure = z > 100 ? 255 : 5;
+                transducer->currentCoordinates.width = z / 2;
+                
                 transducer->isPhysicalButtonDown = reportData.buttons;
                 
                 contactCount += 1;
