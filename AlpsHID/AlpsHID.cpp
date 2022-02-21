@@ -351,7 +351,7 @@ void AlpsHIDEventDriver::t4_raw_event(AbsoluteTime timestamp, IOMemoryDescriptor
             transducer->previousCoordinates = transducer->currentCoordinates;
             transducer->currentCoordinates.x = x;
             transducer->currentCoordinates.y = y;
-            transducer->currentCoordinates.pressure = z > 100 ? 255 : 5;
+            transducer->currentCoordinates.pressure = z > 105 ? 255 : 0;
             transducer->currentCoordinates.width = z / 2;
             
             transducer->isPhysicalButtonDown = reportData.button;
@@ -442,7 +442,7 @@ void AlpsHIDEventDriver::u1_raw_event(AbsoluteTime timestamp, IOMemoryDescriptor
                 transducer->previousCoordinates = transducer->currentCoordinates;
                 transducer->currentCoordinates.x = x;
                 transducer->currentCoordinates.y = y;
-                transducer->currentCoordinates.pressure = z > 100 ? 255 : 5;
+                transducer->currentCoordinates.pressure = z > 105 ? 255 : 0;
                 transducer->currentCoordinates.width = z / 2;
                 
                 transducer->isPhysicalButtonDown = reportData.buttons;
