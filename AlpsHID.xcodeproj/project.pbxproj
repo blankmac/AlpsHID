@@ -10,6 +10,10 @@
 		4E1E99842711E1DA00B13FDC /* libkmod.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E1E99832711E1C900B13FDC /* libkmod.a */; };
 		4E1E998C2711E31500B13FDC /* AlpsHID.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 4E1E998A2711E31500B13FDC /* AlpsHID.hpp */; };
 		4E1E998D2711E31500B13FDC /* AlpsHID.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4E1E998B2711E31500B13FDC /* AlpsHID.cpp */; };
+		7170121027C402C80067BDB5 /* VoodooInputTransducer.h in Headers */ = {isa = PBXBuildFile; fileRef = 7170120C27C402C80067BDB5 /* VoodooInputTransducer.h */; };
+		7170121127C402C80067BDB5 /* MultitouchHelpers.h in Headers */ = {isa = PBXBuildFile; fileRef = 7170120D27C402C80067BDB5 /* MultitouchHelpers.h */; };
+		7170121227C402C80067BDB5 /* VoodooInputEvent.h in Headers */ = {isa = PBXBuildFile; fileRef = 7170120E27C402C80067BDB5 /* VoodooInputEvent.h */; };
+		7170121327C402C80067BDB5 /* VoodooInputMessages.h in Headers */ = {isa = PBXBuildFile; fileRef = 7170120F27C402C80067BDB5 /* VoodooInputMessages.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -18,6 +22,10 @@
 		4E1E99832711E1C900B13FDC /* libkmod.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libkmod.a; path = usr/lib/libkmod.a; sourceTree = SDKROOT; };
 		4E1E998A2711E31500B13FDC /* AlpsHID.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = AlpsHID.hpp; sourceTree = "<group>"; };
 		4E1E998B2711E31500B13FDC /* AlpsHID.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AlpsHID.cpp; sourceTree = "<group>"; };
+		7170120C27C402C80067BDB5 /* VoodooInputTransducer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VoodooInputTransducer.h; sourceTree = "<group>"; };
+		7170120D27C402C80067BDB5 /* MultitouchHelpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MultitouchHelpers.h; sourceTree = "<group>"; };
+		7170120E27C402C80067BDB5 /* VoodooInputEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VoodooInputEvent.h; sourceTree = "<group>"; };
+		7170120F27C402C80067BDB5 /* VoodooInputMessages.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VoodooInputMessages.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -52,6 +60,7 @@
 		4E1E99782711E13D00B13FDC /* AlpsHID */ = {
 			isa = PBXGroup;
 			children = (
+				7170120B27C402C80067BDB5 /* VoodooInputMultitouch */,
 				4E1E998B2711E31500B13FDC /* AlpsHID.cpp */,
 				4E1E998A2711E31500B13FDC /* AlpsHID.hpp */,
 				4E1E997B2711E13D00B13FDC /* Info.plist */,
@@ -67,6 +76,18 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		7170120B27C402C80067BDB5 /* VoodooInputMultitouch */ = {
+			isa = PBXGroup;
+			children = (
+				7170120C27C402C80067BDB5 /* VoodooInputTransducer.h */,
+				7170120D27C402C80067BDB5 /* MultitouchHelpers.h */,
+				7170120E27C402C80067BDB5 /* VoodooInputEvent.h */,
+				7170120F27C402C80067BDB5 /* VoodooInputMessages.h */,
+			);
+			name = VoodooInputMultitouch;
+			path = VoodooInput/Debug/VoodooInput.kext/Contents/Resources/VoodooInputMultitouch;
+			sourceTree = SOURCE_ROOT;
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -74,6 +95,10 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7170121227C402C80067BDB5 /* VoodooInputEvent.h in Headers */,
+				7170121127C402C80067BDB5 /* MultitouchHelpers.h in Headers */,
+				7170121027C402C80067BDB5 /* VoodooInputTransducer.h in Headers */,
+				7170121327C402C80067BDB5 /* VoodooInputMessages.h in Headers */,
 				4E1E998C2711E31500B13FDC /* AlpsHID.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
