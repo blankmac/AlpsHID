@@ -25,6 +25,7 @@ Use the supplied VoodooI2CHID as it contains a fix not yet implemented in the ma
   - ZBook G3 studio
   - Elite X2 1012 G1
   - Elite X2 1012 G2
+  - EliteBook 1040 G3
 
 Should work for devices with VendorID:0x44e, and one of the following ProductID's
 
