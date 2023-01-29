@@ -16,7 +16,11 @@ void AlpsHIDEventDriver::t4_device_init() {
     UInt8 tmp = '\0', sen_line_num_x, sen_line_num_y;
     alps_dev pri_data;
     IOReturn ret = kIOReturnSuccess;
-    
+    /*
+    if (!hid_interface){
+        IOLog("HID interface not found");
+        goto exit;
+    }*/
     if (hid_interface->getProductID() == HID_PRODUCT_ID_T4_BTNLESS) {
         ret = t4_read_write_register(T4_PRM_ID_CONFIG_3, &tmp, 0, true);
         if (ret!=kIOReturnSuccess) {
@@ -136,6 +140,8 @@ bool AlpsHIDEventDriver::handleStart(IOService* provider) {
             
         case HID_PRODUCT_ID_T4_USB:
         case HID_PRODUCT_ID_T4_USB_2:
+        case HID_PRODUCT_ID_T4_USB_3:
+        case HID_PRODUCT_ID_T4_USB_4:
         case HID_PRODUCT_ID_G1:
         case HID_PRODUCT_ID_T4_BTNLESS:
             dev_type = T4;
@@ -453,8 +459,10 @@ void AlpsHIDEventDriver::u1_raw_event(AbsoluteTime timestamp, IOMemoryDescriptor
             
         }
         //send button commands as mouse input.
-        dispatchRelativePointerEvent(timestamp, 0, 0, reportData.buttons & 0x07);
-        
+        spInputMessage.dx = 0;
+        spInputMessage.dy = 0;
+        spInputMessage.buttons = reportData.buttons & 0x07;
+        spInputMessage.timestamp=timestamp;
         inputMessage.contact_count = contactCount;
         inputMessage.timestamp = timestamp;
         
@@ -474,6 +482,7 @@ void AlpsHIDEventDriver::u1_raw_event(AbsoluteTime timestamp, IOMemoryDescriptor
         
         
         super::messageClient(kIOMessageVoodooInputMessage, voodooInputInstance, &inputMessage, sizeof(VoodooInputEvent));
+        super::messageClient(kIOMessageVoodooTrackpointRelativePointer,voodooInputInstance,&spInputMessage, sizeof(RelativePointerEvent));
         return;
     }
     
@@ -483,7 +492,11 @@ void AlpsHIDEventDriver::u1_raw_event(AbsoluteTime timestamp, IOMemoryDescriptor
 #if DEBUG
         IOLog("%s::%s Getting poked dx:%i, dy:%i \n", getName(), name, reportData.x, reportData.y);
 #endif
-        dispatchRelativePointerEvent(timestamp, reportData.x/4,reportData.y/4, reportData.buttons & 0x07);
+        spInputMessage.dx = reportData.x/4;
+        spInputMessage.dy = reportData.y/4;
+        spInputMessage.buttons = reportData.buttons & 0x07;
+        spInputMessage.timestamp=timestamp;
+        super::messageClient(kIOMessageVoodooTrackpointRelativePointer,voodooInputInstance,&spInputMessage, sizeof(RelativePointerEvent));
         return;
     }
     return;

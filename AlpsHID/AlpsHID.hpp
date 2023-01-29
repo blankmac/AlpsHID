@@ -31,6 +31,7 @@ for the alps t4 touchpad (https://github.com/torvalds/linux/blob/master/drivers/
 
 #include "../VoodooInput/VoodooInput/VoodooInputMultitouch/VoodooInputTransducer.h"
 #include "../VoodooInput/VoodooInput/VoodooInputMultitouch/VoodooInputMessages.h"
+#include "../VoodooInput/VoodooInput/Trackpoint/TrackpointDevice.hpp"
 
 #include "helpers.hpp"
 
@@ -44,6 +45,8 @@ for the alps t4 touchpad (https://github.com/torvalds/linux/blob/master/drivers/
 #define HID_PRODUCT_ID_U1_OLDMAN    0x1215
 #define HID_PRODUCT_ID_T4_USB       0X1216
 #define HID_PRODUCT_ID_T4_USB_2     0X1217
+#define HID_PRODUCT_ID_T4_USB_3     0x120f
+#define HID_PRODUCT_ID_T4_USB_4     0x1218
 #define HID_PRODUCT_ID_U1_PTP_1     0x1207
 #define HID_PRODUCT_ID_U1_PTP_2     0x120A
 #define HID_PRODUCT_ID_U1_DUAL_PTP  0x121F
@@ -222,6 +225,7 @@ private:
     IOCommandGate* command_gate;
     
     VoodooInputEvent inputMessage;
+    RelativePointerEvent spInputMessage;
     IOService* voodooInputInstance;
     
     UInt16 t4_calc_check_sum(UInt8 *buffer, unsigned long offset, unsigned long length);
