@@ -21,6 +21,7 @@ Use the supplied VoodooI2CHID as it contains a fix not yet implemented in the ma
   - Latitude 7480
   - Latitude 7490
   - Precision 3520
+  - Precision 7520
 - HP
   - ZBook G3 studio
   - Elite X2 1012 G1
@@ -51,7 +52,6 @@ List of devices that match the ProductIDs above, found using http://linux-hardwa
 
 - 0X120B
   - Dell Precision 3520
-  - Dell Precision 7520
   - Dell Precision 7720
   - Dell Latitude 5280
   - Dell Latitude 5289
